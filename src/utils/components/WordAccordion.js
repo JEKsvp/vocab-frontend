@@ -1,10 +1,20 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import {Accordion, AccordionDetails, AccordionSummary, Divider, Grid, Stack, Typography} from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Divider,
+  Grid,
+  IconButton,
+  Stack,
+  Typography
+} from "@mui/material";
 import {ExpandMore} from "@mui/icons-material";
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 
 
-export const WordAccordion = ({word}) => {
+export const WordAccordion = ({word, onMoveWordClick}) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -53,6 +63,11 @@ export const WordAccordion = ({word}) => {
       </AccordionSummary>
       <AccordionDetails>
         <Divider/>
+        <Grid container direction={'row'} justifyContent={'flex-end'}>
+          <IconButton onClick={onMoveWordClick}>
+            <TrendingFlatIcon/>
+          </IconButton>
+        </Grid>
         <Grid container>
           {definitionsRendered}
         </Grid>
@@ -62,5 +77,6 @@ export const WordAccordion = ({word}) => {
 }
 
 WordAccordion.propTypes = {
-  word: PropTypes.object
+  word: PropTypes.object,
+  onMoveWordClick: PropTypes.func
 }

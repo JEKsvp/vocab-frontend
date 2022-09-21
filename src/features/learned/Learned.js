@@ -1,67 +1,41 @@
-import React from "react";
-import {Box, Grid} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Box, Grid, Typography} from "@mui/material";
 import {WordAccordion} from "../../utils/components/WordAccordion";
-
-const words = [{
-  id: "gsdgsdfg",
-  title: 'glow',
-  transcription: 'ɡləʊ',
-  part: 'verb',
-  definitions: [
-    {
-      definition: '(especially of something hot or warm) to produce a steady light that is not very bright',
-      examples: [
-        'The embers still glowed in the hearth.',
-        'The lighted candles glowed in the darkness.',
-        'The strap has a fluorescent coating that glows in the dark.',
-        'A cigarette end glowed red in the darkness.'
-      ]
-    },
-    {
-      definition: '(especially of something hot or warm) to produce a steady light that is not very bright',
-      examples: [
-        'The embers still glowed in the hearth.',
-        'The lighted candles glowed in the darkness.',
-        'The strap has a fluorescent coating that glows in the dark.',
-        'A cigarette end glowed red in the darkness.'
-      ]
-    },
-    {
-      definition: '(especially of something hot or warm) to produce a steady light that is not very bright',
-      examples: [
-        'The embers still glowed in the hearth.',
-        'The lighted candles glowed in the darkness.',
-        'The strap has a fluorescent coating that glows in the dark.',
-        'A cigarette end glowed red in the darkness.'
-      ]
-    }
-  ]
-},
-  {
-    id: "sgfdsgdsg",
-    title: 'genuflect',
-    transcription: 'ˈdʒɛnjʊflɛkt',
-    part: 'verb',
-    definitions: [
-      {
-        definition: 'to move your body into a lower position by bending one or both knees, as a sign of respect in a church',
-        examples: [
-          'You must genuflect before my power.',
-          'Her  party still genuflects to her, and a core within it reflexively venerates her.',
-        ]
-      }
-    ]
-  }
-]
+import {getAll, moveToToLearn} from "../../api/learnedWordsAPI";
+import {WordsLoader} from "../../utils/components/WordsLoader";
 
 export const Learned = () => {
-  const wordsRendered = words.map(word =>
-    <WordAccordion key={word.id} word={word}/>
-  )
+  const [words, setWords] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {
+    getAll()
+      .then(result => {
+        setWords(result)
+        setIsLoading(false)
+      })
+      .catch(e => console.error(e))
+  })
 
+  let wordsRendered
+  if (isLoading) {
+    console.log("skeleton")
+    wordsRendered = <WordsLoader/>
+  } else {
+    wordsRendered = words.map(word =>
+      <WordAccordion key={word.id}
+                     word={word}
+                     onMoveWordClick={() => moveToToLearn(word.id)}
+      />
+    )
+  }
 
   return (
     <Box>
+      <Grid container justifyContent="center">
+        <Grid item>
+          <Typography variant="h4">Learned</Typography>
+        </Grid>
+      </Grid>
       <Grid container>
         {wordsRendered}
       </Grid>
