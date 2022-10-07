@@ -8,9 +8,12 @@ import {ThemeProvider, createTheme} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import {HomePage} from "./features/home/HomePage";
-import {ToLearn} from "./features/tolearn/ToLearn";
-import {Learned} from "./features/learned/Learned";
-import {NewWordForm} from "./features/newword/NewWordForm";
+import {ToLearn} from "./features/words/ToLearn";
+import {Learned} from "./features/words/Learned";
+import {NewWordForm} from "./features/words/NewWordForm";
+import {LoginPage} from "./features/login/LoginPage";
+import {UserPage} from "./features/user/UserPage";
+import {EditWordForm} from "./features/words/EditWordForm";
 
 const darkTheme = createTheme({
   palette: {
@@ -18,7 +21,7 @@ const darkTheme = createTheme({
   },
 });
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage/>
@@ -34,6 +37,18 @@ const router = createBrowserRouter([
   {
     path: '/new-word',
     element: <NewWordForm/>
+  },
+  {
+    path: '/words/:wordId/edit',
+    element: <EditWordForm/>
+  },
+  {
+    path: '/login',
+    element: <LoginPage/>
+  },
+  {
+    path: "/user",
+    element: <UserPage/>
   }
 ])
 

@@ -1,9 +1,8 @@
-import axios from 'axios';
+import axios from 'axios'
 
-
-export const getCurrentUser = () => {
+export const logout = () => {
   return new Promise(async (resolve, reject) => {
-    axios.get(`/v1/current-user`).then(
+    axios.post('logout').then(
       response => resolve(response.data),
       err => reject(err)
     )

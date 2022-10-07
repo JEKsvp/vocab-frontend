@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import {Box, Button, Grid, IconButton, Paper, TextField} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import {saveWord} from "../../api/toLearnWordsAPI";
+import {saveWord} from "../../api/wordsAPI";
 import {useNavigate} from "react-router-dom";
+import {HomeButton} from "../../utils/components/HomeButton";
 
 const CustomTextField = ({label, id, value, onChange}) => {
   return (
@@ -144,6 +145,7 @@ const blankWord = {
   title: '',
   transcription: '',
   part: '',
+  status: 'TO_LEARN'
 }
 
 const blankDefinitions = [
@@ -257,6 +259,7 @@ export const NewWordForm = () => {
           </Button>
         </Grid>
       </Grid>
+      <HomeButton/>
     </Box>
   )
 }

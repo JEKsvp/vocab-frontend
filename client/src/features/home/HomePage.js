@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box, Divider,
   Grid,
@@ -8,10 +8,17 @@ import {
 import ReplayIcon from '@mui/icons-material/Replay';
 import Replay30Icon from '@mui/icons-material/Replay30';
 import {ListItemLink} from "../../utils/components/ListItemLink";
-import {NewWordButton} from "../newword/NewWordButton";
+import {NewWordButton} from "../../utils/components/NewWordButton";
+import {getCurrentUser} from "../../api/userAPI";
 
 
 export const HomePage = () => {
+  const [,setUser] =  useState(null);
+  useEffect(() => {
+    getCurrentUser()
+      .then(result => setUser(result))
+      .catch(ex => console.error(ex))
+  }, [])
   return (
     <Box sx={{
       height: '100px'

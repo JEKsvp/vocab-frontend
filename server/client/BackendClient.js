@@ -27,7 +27,7 @@ async function sendRequestInternal(req, res) {
 }
 
 function isClientError(e) {
-    return e.response && e.response.status >= 400 || e.response.status < 500;
+    return e.response && e.response.status && e.response.status >= 400 || e.response.status < 500;
 }
 
 async function handleBackendError(req, res, err, needRetry) {
