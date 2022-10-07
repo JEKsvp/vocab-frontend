@@ -1,16 +1,16 @@
 import * as React from 'react';
-import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {Fab} from "@mui/material";
 
 export const NewWordButton = () => {
   const navigate = useNavigate();
   return (
-    <SpeedDial
-      ariaLabel="SpeedDial basic example"
+    <Fab
       sx={{position: 'fixed', bottom: 16, right: 16}}
-      icon={<SpeedDialIcon/>}
-      onOpen={() => navigate('/new-word')}
-    />
+      onClick={() => navigate('/new-word')}
+    >
+      <SpeedDialIcon/>
+    </Fab>
   );
 }

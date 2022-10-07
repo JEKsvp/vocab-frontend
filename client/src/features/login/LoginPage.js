@@ -29,6 +29,7 @@ export const LoginPage = () => {
         <Grid item xs={1}/>
         <Grid item xs={10}>
           <TextField label="Password"
+                     type="password"
                      value={password}
                      onChange={e => setPassword(e.target.value)}
                      fullWidth/>

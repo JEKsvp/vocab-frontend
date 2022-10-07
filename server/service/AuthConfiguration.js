@@ -1,6 +1,6 @@
 const AuthConfiguration = {
     publicUrls: [
-        '/api/v1/signup'
+        '/v1/signup'
     ]
 }
 
