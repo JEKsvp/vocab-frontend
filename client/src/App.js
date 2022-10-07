@@ -1,19 +1,16 @@
 import React from 'react';
 import './App.css';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {createBrowserRouter, RouterProvider,} from "react-router-dom";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import {HomePage} from "./features/home/HomePage";
 import {ToLearn} from "./features/words/ToLearn";
 import {Learned} from "./features/words/Learned";
-import {NewWordForm} from "./features/words/NewWordForm";
 import {LoginPage} from "./features/login/LoginPage";
 import {UserPage} from "./features/user/UserPage";
 import {EditWordForm} from "./features/words/EditWordForm";
+import {NewWordForm} from "./features/words/NewWordForm";
 
 const darkTheme = createTheme({
   palette: {

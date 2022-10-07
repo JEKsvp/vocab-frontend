@@ -8,7 +8,7 @@ export const NewWordButton = () => {
   return (
     <SpeedDial
       ariaLabel="SpeedDial basic example"
-      sx={{position: 'absolute', bottom: 16, right: 16}}
+      sx={{position: 'fixed', bottom: 16, right: 16}}
       icon={<SpeedDialIcon/>}
       onOpen={() => navigate('/new-word')}
     />

@@ -27,14 +27,14 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
 
   const definitionsRendered = word.definitions.map((definition, idx) => {
     const examplesRendered = definition.examples.map((example, idx) => (
-      <React.Fragment key={idx}>
-        <Grid item xs={1}></Grid>
+      <Grid container key={idx}>
+        <Grid item xs={1}/>
         <Grid item xs={11}>
           <Typography sx={{display: 'list-item'}} variant="body1">
             {example}
           </Typography>
         </Grid>
-      </React.Fragment>
+      </Grid>
     ));
     return (
       <React.Fragment key={word.id + idx}>
