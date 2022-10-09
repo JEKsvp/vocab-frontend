@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {HomeButton} from "../../utils/components/HomeButton";
 import PropTypes from "prop-types";
+import {extractPart, extractTranscription, splitExamples} from "./WordParser";
 
 const CustomTextField = ({label, id, value, onChange}) => {
   return (
@@ -40,7 +41,7 @@ const DefinitionTextField = ({value, onChange, onAddDefinition, onRemoveDefiniti
   ) : null
   return (
     <Grid container>
-      <Grid item xs={1}></Grid>
+      <Grid item xs={1}/>
       <Grid item xs={9}>
         <TextField variant="outlined"
                    margin="dense"
@@ -84,7 +85,7 @@ const ExampleTextField = ({
   ) : null
   return (
     <Grid container>
-      <Grid item xs={1}></Grid>
+      <Grid item xs={1}/>
       <Grid item xs={8}>
         <TextField variant="outlined"
                    margin="dense"
@@ -145,9 +146,22 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
 
   function onChangeWord(e) {
     const id = e.target.id;
-    const value = e.target.value;
+    let value = e.target.value;
     const newWord = {...word}
     if (id === 'Title') {
+      if (word.title.length === 0 && value.length > 3) {
+        const transcription = extractTranscription(value);
+        if (transcription) {
+          value = value.replace(transcription, '');
+          newWord.transcription = transcription;
+        }
+        const part = extractPart(value);
+        if (part) {
+          value = value.replace(part, '');
+          newWord.part = part;
+        }
+        value = value.trim();
+      }
       newWord.title = value;
       setWord(newWord);
     } else if (id === 'Transcription') {
@@ -160,8 +174,9 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
   }
 
   function onChangeDefinitions(e, idx) {
+    let newValue = e.target.value;
     const newDefinitions = [...definitions];
-    newDefinitions[idx].definition = e.target.value;
+    newDefinitions[idx].definition = newValue;
     setDefinitions(newDefinitions);
   }
 
@@ -176,8 +191,21 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
   }
 
   function onChangeExample(e, defI, exI) {
+    let newValue = e.target.value;
     const newDefinitions = [...definitions];
-    newDefinitions[defI].examples[exI] = e.target.value;
+    if (newDefinitions[defI].examples[exI].length === 0 && newValue.length > 3) {
+      const examples = splitExamples(newValue);
+      if (examples.length === 1) {
+        newDefinitions[defI].examples[exI] = newValue;
+      } else {
+        newDefinitions[defI].examples = newDefinitions[defI].examples.slice(0, newDefinitions[defI].examples.length - 1);
+        examples.forEach(example => {
+          newDefinitions[defI].examples = newDefinitions[defI].examples.concat(example);
+        })
+      }
+    } else {
+      newDefinitions[defI].examples[exI] = newValue;
+    }
     setDefinitions(newDefinitions);
   }
 

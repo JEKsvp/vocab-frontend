@@ -3,20 +3,24 @@ import {saveWord} from "../../api/wordsAPI";
 import {useNavigate} from "react-router-dom";
 import {WordForm} from "./WordForm";
 
-const blankWord = {
-  id: '',
-  title: '',
-  transcription: '',
-  part: '',
-  status: 'TO_LEARN'
+function getBlankWord() {
+  return {
+    id: '',
+    title: '',
+    transcription: '',
+    part: '',
+    status: 'TO_LEARN'
+  }
 }
 
-const blankDefinitions = [
-  {
-    definition: '',
-    examples: ['']
-  }
-]
+function getBlankDefinitions() {
+  return [
+    {
+      definition: '',
+      examples: ['']
+    }
+  ]
+}
 
 export const NewWordForm = () => {
   const [isSaving, setIsSaving] = useState(false);
@@ -36,8 +40,8 @@ export const NewWordForm = () => {
 
   return (
     <WordForm
-      initWord={blankWord}
-      initDefinitions={blankDefinitions}
+      initWord={getBlankWord()}
+      initDefinitions={getBlankDefinitions()}
       isSaving={isSaving}
       onSave={onSave}
     />

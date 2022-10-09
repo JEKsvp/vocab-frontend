@@ -45,7 +45,7 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
     )
   })
 
-  function onEditClick(wordId){
+  function onEditClick(wordId) {
     navigate(`/words/${wordId}/edit`)
   }
 
@@ -58,25 +58,30 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
         <Stack>
           <Typography variant="h5" component="div">
             {word.title}&nbsp;
-            <Typography variant="h5" color="text.secondary" component="a">
-              /{word.transcription}/
+            <Typography variant="h6" color="text.secondary" component="a">
+              {word.transcription}
             </Typography>
           </Typography>
-
-          <Typography color="text.secondary" component="div">
-            {word.part}
-          </Typography>
+          {
+            expanded === 'panel1' ?
+              <Typography color="text.secondary" component="div">
+                {word.part}
+              </Typography> : null
+          }
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
         <Divider/>
         <Grid container>
+          {definitionsRendered}
+        </Grid>
+        <Grid container>
+          <Grid item xs={6}/>
           <Grid item xs={2}>
             <IconButton onClick={onRemoveClick}>
               <RemoveIcon/>
             </IconButton>
           </Grid>
-          <Grid item xs={3}/>
           <Grid item xs={2}>
             <Grid container direction={'row'} justifyContent={'center'}>
               <IconButton onClick={() => onEditClick(word.id)}>
@@ -84,7 +89,6 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
               </IconButton>
             </Grid>
           </Grid>
-          <Grid item xs={3}/>
           <Grid item xs={2}>
             <Grid container direction={'row'} justifyContent={'flex-end'}>
               <IconButton onClick={onMoveWordClick}>
@@ -93,9 +97,7 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid container>
-          {definitionsRendered}
-        </Grid>
+        <Divider/>
       </AccordionDetails>
     </Accordion>
   )
