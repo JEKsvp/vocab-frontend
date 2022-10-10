@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Box, Grid, Pagination, Typography} from "@mui/material";
 import {WordAccordion} from "../../utils/components/WordAccordion";
 import {changeStatus, getAllWords, removeWord} from "../../api/wordsAPI";
@@ -19,14 +19,21 @@ export const WordsList = ({status}) => {
   const [words, setWords] = useState([])
   const [paging, setPaging] = useState(defaultPaging);
   const [isLoading, setIsLoading] = useState(true)
+  const [position, setPosition] = useState(0);
+
+  const listenToScroll = useCallback(() => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = winScroll / height;
+    setPosition(scrolled);
+  }, [])
 
   useEffect(() => {
-    (async () => {
-      await fetchWords(paging.number, paging.size);
-    })();
-  }, [paging.number, paging.size])
+    window.addEventListener('scroll', listenToScroll)
+    return () => window.removeEventListener('scroll', listenToScroll);
+  })
 
-  async function fetchWords(page, size) {
+  const fetchWords = useCallback(async (status, page, size) => {
     try {
       setIsLoading(true);
       const result = await getAllWords(status, page - 1, size);
@@ -37,17 +44,24 @@ export const WordsList = ({status}) => {
     } catch (ex) {
       console.error(ex);
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      await fetchWords(status, paging.number, paging.size);
+      window.scrollTo(0, position);
+    })();
+  }, [status, paging.number, paging.size, fetchWords])
 
   function onChangeStatus(wordId) {
     changeStatus(wordId, status === 'TO_LEARN' ? 'LEARNED' : 'TO_LEARN')
-      .then(async () => await fetchWords(paging.number, paging.size))
+      .then(async () => await fetchWords(status, paging.number, paging.size))
       .catch(ex => console.error(ex));
   }
 
   function onRemoveWord(wordId) {
     removeWord(wordId)
-      .then(async () => await fetchWords(paging.number, paging.size))
+      .then(async () => await fetchWords(status, paging.number, paging.size))
       .catch(ex => console.error(ex));
   }
 

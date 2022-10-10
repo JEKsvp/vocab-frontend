@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import Slide from '@mui/material/Slide';
 import {Grid, IconButton, InputAdornment, Paper, TextField, Typography} from "@mui/material";
 import {getAllWords} from "../../api/wordsAPI";
@@ -11,8 +11,8 @@ export default function SearchWord() {
   const [searchQuery, setSearchQuery] = useState('');
   const [words, setWords] = useState([]);
 
-  const debouncedSearch = useCallback(
-    debounce((newValue) => {
+  const debouncedSearch = useMemo(
+    () => debounce((newValue) => {
       if (newValue && newValue.length > 2) {
         getAllWords(null, 0, 10, newValue)
           .then(result => setWords(result.data))
@@ -22,10 +22,14 @@ export default function SearchWord() {
     []
   );
 
-  function onSearchQueryChange(e) {
-    setSearchQuery(e.target.value);
-    debouncedSearch(e.target.value);
-  }
+  const onSearchQueryChange = useCallback(
+    e => {
+      setSearchQuery(e.target.value);
+      debouncedSearch(e.target.value);
+    },
+    [debouncedSearch]
+  )
+
 
   function handleClickOpen() {
     setOpen(true);
