@@ -17,7 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import {useNavigate} from "react-router-dom";
 
 
-export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
+export const WordAccordion = ({word, onMoveWordClick, onRemoveClick, showButtons = true}) => {
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
 
@@ -75,28 +75,29 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
         <Grid container>
           {definitionsRendered}
         </Grid>
-        <Grid container>
-          <Grid item xs={6}/>
-          <Grid item xs={2}>
-            <IconButton onClick={onRemoveClick}>
-              <RemoveIcon/>
-            </IconButton>
-          </Grid>
-          <Grid item xs={2}>
-            <Grid container direction={'row'} justifyContent={'center'}>
-              <IconButton onClick={() => onEditClick(word.id)}>
-                <EditIcon/>
+        {showButtons ?
+          <Grid container>
+            <Grid item xs={6}/>
+            <Grid item xs={2}>
+              <IconButton onClick={onRemoveClick}>
+                <RemoveIcon/>
               </IconButton>
             </Grid>
-          </Grid>
-          <Grid item xs={2}>
-            <Grid container direction={'row'} justifyContent={'flex-end'}>
-              <IconButton onClick={onMoveWordClick}>
-                <TrendingFlatIcon/>
-              </IconButton>
+            <Grid item xs={2}>
+              <Grid container direction={'row'} justifyContent={'center'}>
+                <IconButton onClick={() => onEditClick(word.id)}>
+                  <EditIcon/>
+                </IconButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
+            <Grid item xs={2}>
+              <Grid container direction={'row'} justifyContent={'flex-end'}>
+                <IconButton onClick={onMoveWordClick}>
+                  <TrendingFlatIcon/>
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Grid> : null}
         <Divider/>
       </AccordionDetails>
     </Accordion>
@@ -106,5 +107,6 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick}) => {
 WordAccordion.propTypes = {
   word: PropTypes.object,
   onMoveWordClick: PropTypes.func,
-  onRemoveClick: PropTypes.func
+  onRemoveClick: PropTypes.func,
+  showButtons: PropTypes.bool
 }

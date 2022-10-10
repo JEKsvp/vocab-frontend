@@ -19,6 +19,7 @@ echo -e " \n WORK_DIR $WORK_DIR "
 cd "${WORK_DIR}/client/" || exit
 npm run build
 
+rm -r "${WORK_DIR}/server/public/dist"
 mv "${WORK_DIR}/client/dist" "${WORK_DIR}/server/public/"
 
 cd "$WORK_DIR" || exit
