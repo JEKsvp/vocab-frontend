@@ -11,6 +11,7 @@ import {LoginPage} from "./features/login/LoginPage";
 import {UserPage} from "./features/user/UserPage";
 import {EditWordForm} from "./features/words/EditWordForm";
 import {NewWordForm} from "./features/words/NewWordForm";
+import {WordsBatch} from "./features/words/WordsBatch";
 
 const darkTheme = createTheme({
   palette: {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
   {
     path: "/user",
     element: <UserPage/>
+  },
+  {
+    path: '/words-batch',
+    element: <WordsBatch/>
   }
 ])
 

@@ -17,21 +17,8 @@ const defaultPaging = {
 
 export const WordsList = ({status}) => {
   const [words, setWords] = useState([])
-  const [paging, setPaging] = useState(defaultPaging);
+  const [paging, setPaging] = useState(defaultPaging)
   const [isLoading, setIsLoading] = useState(true)
-  const [position, setPosition] = useState(0);
-
-  const listenToScroll = useCallback(() => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = winScroll / height;
-    setPosition(scrolled);
-  }, [])
-
-  useEffect(() => {
-    window.addEventListener('scroll', listenToScroll)
-    return () => window.removeEventListener('scroll', listenToScroll);
-  })
 
   const fetchWords = useCallback(async (status, page, size) => {
     try {
@@ -49,7 +36,6 @@ export const WordsList = ({status}) => {
   useEffect(() => {
     (async () => {
       await fetchWords(status, paging.number, paging.size);
-      window.scrollTo(0, position);
     })();
   }, [status, paging.number, paging.size, fetchWords])
 
@@ -104,7 +90,7 @@ export const WordsList = ({status}) => {
     <Box>
       <Grid container justifyContent="center">
         <Grid item>
-          <Typography variant="h4">To learn</Typography>
+          <Typography variant="h4">{status === 'TO_LEARN' ? 'To learn' : 'Learned'}</Typography>
         </Grid>
       </Grid>
       <Grid container>

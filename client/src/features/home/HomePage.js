@@ -3,6 +3,7 @@ import {Box, Divider, Grid, List} from "@mui/material";
 
 import ReplayIcon from '@mui/icons-material/Replay';
 import Replay30Icon from '@mui/icons-material/Replay30';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import {ListItemLink} from "../../utils/components/ListItemLink";
 import {NewWordButton} from "../../utils/components/NewWordButton";
 import {getCurrentUser} from "../../api/userAPI";
@@ -30,6 +31,8 @@ export const HomePage = () => {
           <Grid item xs={12}>
             <Divider/>
             <List>
+              <ListItemLink to={'/words-batch'} title={'Batch'} icon={<ListAltIcon fontSize={"large"}/>}/>
+              <Divider/>
               <ListItemLink to={'/to-learn'} title={'To learn'} icon={<ReplayIcon fontSize={"large"}/>}/>
               <Divider/>
               <ListItemLink to={'/learned'} title={'Learned'} icon={<Replay30Icon fontSize={"large"}/>}/>

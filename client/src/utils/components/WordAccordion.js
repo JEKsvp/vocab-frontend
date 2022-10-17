@@ -49,8 +49,12 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick, showButtons
     navigate(`/words/${wordId}/edit`)
   }
 
+  const backgroundColor = 'LEARNED' === word.status ? '#1e1e1e' : null
   return (
-    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+    <Accordion
+      sx={{backgroundColor: backgroundColor}}
+      expanded={expanded === 'panel1'}
+      onChange={handleChange('panel1')}>
       <AccordionSummary
         expandIcon={<ExpandMore/>}
         aria-controls="panel1bh-content"
@@ -79,9 +83,10 @@ export const WordAccordion = ({word, onMoveWordClick, onRemoveClick, showButtons
           <Grid container>
             <Grid item xs={6}/>
             <Grid item xs={2}>
-              <IconButton onClick={onRemoveClick}>
-                <RemoveIcon/>
-              </IconButton>
+              {onRemoveClick ? (
+                <IconButton onClick={onRemoveClick}>
+                  <RemoveIcon/>
+                </IconButton>) : null}
             </Grid>
             <Grid item xs={2}>
               <Grid container direction={'row'} justifyContent={'center'}>
