@@ -4,26 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {HomeButton} from "../../utils/components/HomeButton";
 import PropTypes from "prop-types";
-import {extractPart, extractTranscription, splitExamples} from "./WordParser";
-
-const CustomTextField = ({label, id, value, onChange}) => {
-  return (
-    <Grid container>
-      <Grid item xs={1}/>
-      <Grid item xs={10}>
-        <TextField variant="outlined"
-                   margin="dense"
-                   label={label}
-                   id={id}
-                   fullWidth
-                   value={value}
-                   onChange={onChange}
-                   size="medium"
-        />
-      </Grid>
-    </Grid>
-  )
-}
+import {extractPart, extractTranscription, splitByNewLine} from "./WordParser";
 
 const DefinitionTextField = ({value, onChange, onAddDefinition, onRemoveDefinition, defMeta}) => {
   const removeButton = defMeta.i === 0 ? null : (
@@ -144,39 +125,52 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
   const [word, setWord] = useState(initWord)
   const [definitions, setDefinitions] = useState(initDefinitions)
 
-  function onChangeWord(e) {
-    const id = e.target.id;
-    let value = e.target.value;
+  function handleChangeTitle(newValue) {
     const newWord = {...word}
-    if (id === 'Title') {
-      if (word.title.length === 0 && value.length > 3) {
-        const transcription = extractTranscription(value);
-        if (transcription) {
-          value = value.replace(transcription, '');
-          newWord.transcription = transcription;
-        }
-        const part = extractPart(value);
-        if (part) {
-          value = value.replace(part, '');
-          newWord.part = part;
-        }
-        value = value.trim();
+    if (word.title.length === 0 && newValue.length > 3) {
+      const transcription = extractTranscription(newValue);
+      if (transcription) {
+        newValue = newValue.replace(transcription, '');
+        newWord.transcription = transcription;
       }
-      newWord.title = value;
-      setWord(newWord);
-    } else if (id === 'Transcription') {
-      newWord.transcription = value;
-      setWord(newWord);
-    } else if (id === 'Part') {
-      newWord.part = value;
-      setWord(newWord);
+      const part = extractPart(newValue);
+      if (part) {
+        newValue = newValue.replace(part, '');
+        newWord.part = part;
+      }
+      newValue = newValue.trim();
     }
+    newWord.title = newValue;
+    setWord(newWord);
   }
 
-  function onChangeDefinitions(e, idx) {
-    let newValue = e.target.value;
+  function handleChangeTranscription(newValue) {
+    const newWord = {...word}
+    newWord.transcription = newValue;
+    setWord(newWord);
+  }
+
+  function handleChangePart(newValue) {
+    const newWord = {...word}
+    newWord.part = newValue;
+    setWord(newWord);
+  }
+
+  function onChangeDefinitions(newValue, idx) {
     const newDefinitions = [...definitions];
-    newDefinitions[idx].definition = newValue;
+    const oldDefinition = newDefinitions[idx].definition;
+    if (oldDefinition.length === 0 && newValue.length > 3) {
+      let definitionAndExamples = splitByNewLine(newValue);
+      newDefinitions[idx].definition = definitionAndExamples[0];
+      if (definitionAndExamples.length > 1) {
+        const examples = definitionAndExamples
+          .slice(1, definitionAndExamples.length)
+          .reduce((e1, e2) => e1 + '\n' + e2);
+        onChangeExample(examples, idx, 0)
+      }
+    } else {
+      newDefinitions[idx].definition = newValue;
+    }
     setDefinitions(newDefinitions);
   }
 
@@ -190,11 +184,10 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
     setDefinitions(newDefinitions);
   }
 
-  function onChangeExample(e, defI, exI) {
-    let newValue = e.target.value;
+  function onChangeExample(newValue, defI, exI) {
     const newDefinitions = [...definitions];
     if (newDefinitions[defI].examples[exI].length === 0 && newValue.length > 3) {
-      const examples = splitExamples(newValue);
+      const examples = splitByNewLine(newValue);
       if (examples.length === 1) {
         newDefinitions[defI].examples[exI] = newValue;
       } else {
@@ -227,8 +220,8 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
     <DefinitionGroup key={defI}
                      defMeta={{i: defI, length: definitions.length}}
                      definition={definition}
-                     onChangeDefinitions={e => onChangeDefinitions(e, defI)}
-                     onChangeExample={(e, exI) => onChangeExample(e, defI, exI)}
+                     onChangeDefinitions={e => onChangeDefinitions(e.target.value, defI)}
+                     onChangeExample={(e, exI) => onChangeExample(e.target.value, defI, exI)}
                      onAddDefinition={e => onAddDefinition()}
                      onRemoveDefinition={e => onRemoveDefinition()}
                      onAddExample={e => onAddExample(e, defI)}
@@ -238,10 +231,48 @@ export const WordForm = ({initWord, initDefinitions, onSave, isSaving}) => {
 
   return (
     <Box>
-      <CustomTextField label="Title" value={word.title} id="Title" onChange={(e) => onChangeWord(e)}/>
-      <CustomTextField label="Transcription" value={word.transcription} id="Transcription"
-                       onChange={(e) => onChangeWord(e)}/>
-      <CustomTextField label="Part" value={word.part} id="Part" onChange={(e) => onChangeWord(e)}/>
+      <Grid container>
+        <Grid item xs={1}/>
+        <Grid item xs={10}>
+          <TextField variant="outlined"
+                     margin="dense"
+                     label="Title"
+                     id="Title"
+                     fullWidth
+                     value={word.title}
+                     onChange={(e) => handleChangeTitle(e.target.value)}
+                     size="medium"
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={1}/>
+        <Grid item xs={10}>
+          <TextField variant="outlined"
+                     margin="dense"
+                     label="Transcription"
+                     id="Transcription"
+                     fullWidth
+                     value={word.transcription}
+                     onChange={(e) => handleChangeTranscription(e.target.value)}
+                     size="medium"
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={1}/>
+        <Grid item xs={10}>
+          <TextField variant="outlined"
+                     margin="dense"
+                     label="Part"
+                     id="Part"
+                     fullWidth
+                     value={word.part}
+                     onChange={(e) => handleChangePart(e.target.value)}
+                     size="medium"
+          />
+        </Grid>
+      </Grid>
       {definitionsRendered}
       <Grid container justifyContent="center">
         <Grid item>

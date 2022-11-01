@@ -14,6 +14,6 @@ export function extractPart(str) {
   }
 }
 
-export function splitExamples(str){
+export function splitByNewLine(str){
   return str.split('\n');
 }
