@@ -7,6 +7,7 @@ import {NewWordButton} from "../../utils/components/NewWordButton";
 import {HomeButton} from "../../utils/components/HomeButton";
 import PropTypes from "prop-types";
 import {WordForm} from "./WordForm";
+import {LanguageStore} from "../../app/LanguageStore";
 
 const defaultPaging = {
   size: 50,
@@ -23,7 +24,13 @@ export const WordsList = ({status}) => {
   const fetchWords = useCallback(async (status, page, size) => {
     try {
       setIsLoading(true);
-      const result = await getAllWords(status, page - 1, size);
+      const result = await getAllWords(
+        {
+          status: status,
+          page: page - 1,
+          size: size,
+          language: LanguageStore.getLanguage().api
+        });
       setWords(result.data);
       setIsLoading(false);
       result.paging.number = result.paging.number + 1;

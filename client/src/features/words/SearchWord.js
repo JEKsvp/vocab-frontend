@@ -5,6 +5,7 @@ import {getAllWords} from "../../api/wordsAPI";
 import {WordAccordion} from "../../utils/components/WordAccordion";
 import CloseIcon from '@mui/icons-material/Close';
 import debounce from "lodash/debounce";
+import {LanguageStore} from "../../app/LanguageStore";
 
 export default function SearchWord() {
   const [open, setOpen] = useState(false);
@@ -14,7 +15,13 @@ export default function SearchWord() {
   const debouncedSearch = useMemo(
     () => debounce((newValue) => {
       if (newValue && newValue.length > 2) {
-        getAllWords(null, 0, 10, newValue)
+        getAllWords({
+          status: null,
+          page: 0,
+          size: 10,
+          q: newValue,
+          language: LanguageStore.getLanguage().api
+        })
           .then(result => setWords(result.data))
           .catch(ex => console.error(ex))
       }

@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {saveWord} from "../../api/wordsAPI";
 import {useNavigate} from "react-router-dom";
 import {WordForm} from "./WordForm";
+import {LanguageStore} from "../../app/LanguageStore";
 
 function getBlankWord() {
   return {
@@ -9,7 +10,8 @@ function getBlankWord() {
     title: '',
     transcription: '',
     part: '',
-    status: 'TO_LEARN'
+    status: 'TO_LEARN',
+    language: LanguageStore.getLanguage().api
   }
 }
 

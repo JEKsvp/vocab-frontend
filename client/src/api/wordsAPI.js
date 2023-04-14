@@ -1,8 +1,16 @@
 import axios from 'axios'
 
-export const getAllWords = async (status, page, size, query) => {
+export const getAllWords = async (params) => {
   return new Promise(async (resolve, reject) => {
-    axios.get(`/v1/words`, {params: {status: status, page: page, size: size, q: query}}).then(
+    axios.get(`/v1/words`, {
+      params: {
+        status: params.status,
+        page: params.page,
+        size: params.size,
+        q: params.q,
+        language: params.language
+      }
+    }).then(
       response => resolve(response.data),
       err => reject(err)
     )

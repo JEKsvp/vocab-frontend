@@ -7,6 +7,7 @@ import {WordAccordion} from "../../utils/components/WordAccordion";
 import {generateBatch, getBatch} from "../../api/wordsBatchAPI";
 import {changeStatus} from "../../api/wordsAPI";
 import CachedIcon from '@mui/icons-material/Cached';
+import {LanguageStore} from "../../app/LanguageStore";
 
 export const WordsBatch = () => {
   const [words, setWords] = useState(null);
@@ -16,7 +17,7 @@ export const WordsBatch = () => {
   const fetchWords = useCallback(async () => {
     try {
       setIsLoading(true);
-      const result = await getBatch();
+      const result = await getBatch(LanguageStore.getLanguage().api);
       setWords(result);
       setIsLoading(false);
     } catch (ex) {
@@ -46,7 +47,7 @@ export const WordsBatch = () => {
 
   function generateNewBatch() {
     setIsLoading(true);
-    generateBatch()
+    generateBatch(LanguageStore.getLanguage().api)
       .then(async () => {
         const words = await fetchWords();
         setIsLoading(false);
